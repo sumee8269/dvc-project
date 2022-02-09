@@ -1,0 +1,8 @@
+ mkdir -p src/utils artifacts
+
+touch setup.py src/__init__.py src/utils/__init__.py params.yaml dvc.yaml
+
+touch artifat/.gitkeep
+
+touch src/load_and_save.py src/split_data.py src/train.py src/evaluate.py
+
