@@ -10,6 +10,14 @@ from sklearn.linear_model import LinearRegression
 import joblib
 
 
+
+#logging_str= "[%(asctime)s: %(levelname)s : %(module)s]: %(message)s"
+logging.basicConfig(level = logging.INFO)
+
+
+
+
+
 def train(config_path):
     config= read_params(config_path)
     artifacts = config["artifacts"]
@@ -51,6 +59,8 @@ def train(config_path):
 
     joblib.dump(lr, model_path)
 
+    logging.info(f"model saved at {model_path}")
+
 
 # argpass is like fuction creation 
 if __name__ == '__main__':
@@ -60,5 +70,8 @@ if __name__ == '__main__':
 
     try:
         data=train(config_path = parsed_args.config)
+        logging.info(f"train stage completed")
+
     except Exception as e:
+        logging.error(e)
         raise e

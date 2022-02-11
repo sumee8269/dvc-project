@@ -5,6 +5,8 @@ from src.utils.common_utils import read_params,clean_prev_dirs_if_exists,create_
 import logging
 
 
+#logging_str = "%(asctime)s %(name)s %(levelname)s %(message)s"
+logging.basicConfig(level= logging.INFO)
 
 
 def get_data(config_path):
@@ -31,5 +33,7 @@ if __name__ == '__main__':
 
     try:
         data=get_data(config_path = parsed_args.config)
+        logging.info(f"reading and writing raw data stage completed")
     except Exception as e:
+        logging.error(e)
         raise e

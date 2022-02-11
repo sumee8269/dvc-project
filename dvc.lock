@@ -4,13 +4,81 @@ stages:
     cmd: python src/load_and_save.py --config=params.yaml
     deps:
     - path: src/load_and_save.py
-      md5: f237d1f85f20678e27e99f4a3d57d078
-      size: 985
+      md5: 5a2299a843f5b2dd665c99809a9827ef
+      size: 1221
     params:
       params.yaml:
         artifacts.raw_local_data: artifacts/raw_local_data_dir/data.csv
-        data_source.s3_source: C:\\Users\\Sumit\\Downloads\\Bike-Sharing-Dataset\\hour.csv
+        data_source.s3_source: C:\\Users\\Sumit\\Desktop\\desktop files 27-1-22\\i
+          python practice\\linear regression\\Advertising.csv
     outs:
     - path: artifacts/raw_local_data_dir/data.csv
-      md5: 4659f5e95bd5d9cd5cc3d8884485f80a
-      size: 1191496
+      md5: 99dd1a8d5b500df0cc64336bf99b1b6b
+      size: 4213
+  split_data:
+    cmd: python src/split_data.py --config=params.yaml
+    deps:
+    - path: artifacts/raw_local_data_dir/data.csv
+      md5: 99dd1a8d5b500df0cc64336bf99b1b6b
+      size: 4213
+    - path: src/split_data.py
+      md5: 10da13bdca434fee88485a50d45e33a5
+      size: 1514
+    params:
+      params.yaml:
+        artifacts.raw_local_data: artifacts/raw_local_data_dir/data.csv
+        artifacts.split_data.processed_data_dir: artifacts/processed_data
+        artifacts.split_data.test_path: artifacts/processed_data/test.csv
+        artifacts.split_data.train_path: artifacts/processed_data/train.csv
+        base.random_state: 42
+        base.test_size: 0.2
+    outs:
+    - path: artifacts/processed_data/test.csv
+      md5: f5dbec7cc343938700e6f2783180dfbb
+      size: 858
+    - path: artifacts/processed_data/train.csv
+      md5: 9d076c1de3f44d121e121b309b7d229b
+      size: 3381
+  train:
+    cmd: python src/train.py --config=params.yaml
+    deps:
+    - path: artifacts/processed_data/train.csv
+      md5: 9d076c1de3f44d121e121b309b7d229b
+      size: 3381
+    - path: src/train.py
+      md5: d482a285916f1398c2e9c3a85375fe2f
+      size: 2047
+    params:
+      params.yaml:
+        artifacts.split_data.train_path: artifacts/processed_data/train.csv
+        base.random_state: 42
+        base.target_col: sales
+        estimators.ElasticNet.params.alpha: 0.9
+        estimators.ElasticNet.params.l1_ratio: 0.4
+    outs:
+    - path: artifacts/report/params.json
+      md5: a4aab0167612f21a6085dd05cfafdbf6
+      size: 44
+    - path: artifacts/saved_models/model.joblib
+      md5: b341c812c55c231612bac55036bc902d
+      size: 1085
+  evaluate:
+    cmd: python src/evaluate.py --config=params.yaml
+    deps:
+    - path: artifacts/processed_data/test.csv
+      md5: f5dbec7cc343938700e6f2783180dfbb
+      size: 858
+    - path: artifacts/saved_models/model.joblib
+      md5: b341c812c55c231612bac55036bc902d
+      size: 1085
+    - path: src/evaluate.py
+      md5: 08b7db9191bffc75529cd2cd00483b72
+      size: 1853
+    params:
+      params.yaml:
+        artifacts.split_data.test_path: artifacts/processed_data/test.csv
+        base.target_col: sales
+    outs:
+    - path: artifacts/report/scores.json
+      md5: 7328f43075dab007672fbfdaa41e2c8f
+      size: 105
