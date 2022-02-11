@@ -1,3 +1,4 @@
+from operator import index
 import pandas as pd
 import argparse
 from src.utils.common_utils import read_params,clean_prev_dirs_if_exists,create_dir,save_local_df
@@ -17,7 +18,7 @@ def get_data(config_path):
 
     create_dir(dirs=[artifacts_dir,raw_local_data_dir])
 
-    df = pd.read_csv(data_path,sep=";")
+    df = pd.read_csv(data_path,index_col=0)
 
     save_local_df(df,raw_local_data,header =True)
 
