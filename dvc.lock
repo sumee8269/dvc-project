@@ -1,0 +1,16 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/load_and_save.py --config=params.yaml
+    deps:
+    - path: src/load_and_save.py
+      md5: f237d1f85f20678e27e99f4a3d57d078
+      size: 985
+    params:
+      params.yaml:
+        artifacts.raw_local_data: artifacts/raw_local_data_dir/data.csv
+        data_source.s3_source: C:\\Users\\Sumit\\Downloads\\Bike-Sharing-Dataset\\hour.csv
+    outs:
+    - path: artifacts/raw_local_data_dir/data.csv
+      md5: 4659f5e95bd5d9cd5cc3d8884485f80a
+      size: 1191496
